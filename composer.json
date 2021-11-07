@@ -9,6 +9,7 @@
   },
   "minimum-stability": "dev",
   "require": {
-    "phpro/grumphp": "dev-master"
+    "phpro/grumphp": "dev-master",
+    "symfony/asset": "5.4.x-dev"
   }
 }

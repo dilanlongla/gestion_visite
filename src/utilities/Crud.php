@@ -1,12 +1,5 @@
 <?php
 
-/**
- * Abstruct crud class containing methods for implementing crud functionality in model classes
- *
- * @copyright  Longla Dilan
- * @version    1.0
- */
-
 namespace GestionVisites\Utilities;
 
 abstract class Crud
