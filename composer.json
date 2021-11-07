@@ -1,0 +1,14 @@
+{
+  "name": "vendor/gestion_visites",
+  "description": "project d'ecole",
+  "type": "project",
+  "autoload": {
+    "psr-4": {
+      "GestionVisites\\": "src/"
+    }
+  },
+  "minimum-stability": "dev",
+  "require": {
+    "phpro/grumphp": "dev-master"
+  }
+}
