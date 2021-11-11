@@ -16,7 +16,7 @@ require '../../vendor/autoload.php';
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
-    <title>Preskool - Dashboard</title>
+    <title>Preskool - Acceuil</title>
 
     <link rel="shortcut icon" href="assets/img/favicon.png">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,500;0,600;0,700;1,400&amp;display=swap">
@@ -68,23 +68,16 @@ require '../../vendor/autoload.php';
                 <div id="sidebar-menu" class="sidebar-menu">
                     <ul>
                         <li class="menu-title">
-                            <span>Main Menu</span>
+                            <span>Menu</span>
                         </li>
                         <li class="">
-                            <a href="index.php"><i class="fas fa-th-large"></i> <span>Dashboard</span></a>
+                            <a href="index.php"><i class="fas fa-th-large active"></i> <span class="active">Acceuil</span></a>
                         </li>
-                        <li class="submenu ">
-                            <a href="#"><i class="fas fa-user-graduate"></i> <span> Students</span> <span class="menu-arrow"></span></a>
-                            <ul>
-                                <li><a class="" href="students.html">Student List</a></li>
-                                <li><a class="" href="student-details.html">Student View</a></li>
-                                <li><a class="" href="add-student.html">Student Add</a></li>
-                                <li><a class="" href="edit-student.html">Student Edit</a></li>
-                            </ul>
+                        <li class="">
+                            <a href="views/rapport/index.php"><i class="fas fa-user-graduate"></i> <span>Rapports</span></a>
                         </li>
-
-                        <li class="menu-title">
-                            <span>Management</span>
+                        <li class="">
+                            <a href="views/medecin/index.php"><i class="fas fa-user-graduate"></i> <span>Medecin</span></a>
                         </li>
                     </ul>
                 </div>
@@ -95,14 +88,14 @@ require '../../vendor/autoload.php';
             <div class="content container-fluid">
 
             </div>
+            <footer>
+                <p>Copyright © 2021 ViZit.</p>
+            </footer>
         </div>
-
     </div>
 
 
-    <footer>
-        <p>Copyright © 2020 Dreamguys.</p>
-    </footer>
+
 </body>
 
 
