@@ -4,9 +4,10 @@ namespace GestionVisites\Utilities;
 
 abstract class Crud
 {
-    private $dbConnection;
-    private $path;
-    private $tableName;
+    protected $dbConnection;
+    protected $path;
+    protected $tableName;
+    protected $tableId;
 
     //constructor
     public function __construct($dbConnection, $tableName, $tableId = 'id')
@@ -16,12 +17,12 @@ abstract class Crud
         $this->tableId = $tableId;
     }
 
-    protected function setPath($path)
+    public function setPath($path)
     {
         $this->path = $path;
     }
 
-    protected function findAll()
+    public function findAll()
     {
         $query = " SELECT * FROM " . $this->tableName . ";";
         try {
@@ -34,9 +35,9 @@ abstract class Crud
         return $result;
     }
 
-    protected function findById($id)
+    public function findById($id)
     {
-        $query = " SELECT * FROM " . $this->tableName . " WHERE " . $this->params['id'] . " = :id; ";
+        $query = " SELECT * FROM " . $this->tableName . " WHERE " . $this->tableId . " = :id; ";
 
         try {
             $statement = $this->dbConnection->prepare($query);
@@ -48,13 +49,13 @@ abstract class Crud
         }
     }
 
-    protected function findByPath($var)
+    public function findByPath($var)
     {
-        $query = " SELECT * FROM " . $this->tableName . " WHERE " . $this->path . " = :id; ";
+        $query = " SELECT * FROM " . $this->tableName . " WHERE " . $this->path . " ='$var'; ";
 
         try {
             $statement = $this->dbConnection->prepare($query);
-            $statement->execute(array('id' => $var));
+            $statement->execute(array('var' => $var));
             $result = $statement->fetchAll(\PDO::FETCH_ASSOC);
             return $result;
         } catch (\PDOException $e) {
@@ -64,7 +65,7 @@ abstract class Crud
 
 
 
-    protected function create($input)
+    public function create($input)
     {
         //preparing fields
         $fields = "";
@@ -111,7 +112,7 @@ abstract class Crud
         return $result;
     }
 
-    protected function update($id, $input)
+    public function update($id, $input)
     {
         $result = $this->findById($id);
         if (!$result) {
@@ -149,7 +150,7 @@ abstract class Crud
     }
 
 
-    protected function delete($id)
+    public function delete($id)
     {
         $result = $this->findByPath($id);
         if (!$result) {
