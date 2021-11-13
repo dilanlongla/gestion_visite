@@ -19,8 +19,10 @@ $rapportController = new Rapport($dbConnection);
 $medecinController = new Medecin($dbConnection);
 $medicamentController = new Medicament($dbConnection);
 
-$medicaments = $medicamentController->findAll();
 $medecins = $medecinController->findAll();
+if (isset($_GET['id'])) {
+    $rapportActif = $rapportController->findById($_GET['id']);
+}
 
 if (isset($_POST['submit'])) {
     $data = [];
@@ -39,11 +41,12 @@ if (isset($_POST['submit'])) {
     if (isset($_POST['idMedecin'])) {
         $data['idMedecin'] = $_POST['idMedecin'];
     }
-
     if (isset($_POST['specialiteComplementaire'])) {
         $data['specialiteComplementaire'] = $_POST['specialiteComplementaire'];
     }
-    $result = $rapportController->create($data);
+
+    $id = $_POST['id'];
+    $result = $rapportController->update($id, $data);
 
     $offrirController = new Offrir($dbConnection);
     if ($result) {
@@ -57,6 +60,10 @@ if (isset($_POST['submit'])) {
         $offrirController->create($offrir);
 
         header('Location: index.php');
+        exit();
+    } else {
+        echo 'error occured';
+
         exit();
     }
 }
@@ -167,10 +174,10 @@ if (isset($_POST['submit'])) {
                 <div class="page-header">
                     <div class="row align-items-center">
                         <div class="col">
-                            <h3 class="page-title">Creer Rapport</h3>
+                            <h3 class="page-title">Modifier Rapport</h3>
                             <ul class="breadcrumb">
                                 <li class="breadcrumb-item"><a href="index.php">Rapport</a></li>
-                                <li class="breadcrumb-item active">Creer Rapport</li>
+                                <li class="breadcrumb-item active">Modifier Rapport</li>
                             </ul>
                         </div>
                     </div>
@@ -181,11 +188,12 @@ if (isset($_POST['submit'])) {
                     <div class="col-sm-12">
                         <div class="card">
                             <div class="card-body">
-                                <form action="ajouter.php" method="POST">
+                                <form action="modifier.php" method="POST">
                                     <div class="row">
                                         <div class="col-12">
                                             <h5 class="form-title"><span>Formulaire</span></h5>
                                         </div>
+                                        <input type="text" name="id" hidden value="<?php echo $rapportActif['id'] ?>" required class="form-control">
                                         <div class="col-12 col-sm-6">
                                             <div class="form-group">
                                                 <label>Medecin</label>
@@ -194,7 +202,7 @@ if (isset($_POST['submit'])) {
                                                     <?php
                                                     foreach ($medecins as $medecin) {
                                                     ?>
-                                                        <option value="<?php echo $medecin['id'] ?>"><?php echo $medecin['nom'] . ' - ' . $medecin['departement'] ?></option>
+                                                        <option value="<?php echo $medecin['id'] ?>" <?php echo $rapportActif['idMedecin'] == $medecin['id'] ? "selected='selected'" : "" ?>> <?php echo $medecin['nom'] . ' - ' . $medecin['departement'] ?></option>
                                                     <?php
                                                     }
                                                     ?>
@@ -204,19 +212,19 @@ if (isset($_POST['submit'])) {
                                         <div class="col-12 col-sm-6">
                                             <div class="form-group">
                                                 <label>Date</label>
-                                                <input type="date" name="date" class="form-control">
+                                                <input type="date" name="date" value="<?php echo $rapportActif['date'] ?>" class="form-control">
                                             </div>
                                         </div>
                                         <div class="col-12 col-sm-6">
                                             <div class="form-group">
                                                 <label>Bilan</label>
-                                                <input type="text" name="bilan" class="form-control">
+                                                <input type="text" name="bilan" value="<?php echo $rapportActif['bilan'] ?>" class="form-control">
                                             </div>
                                         </div>
                                         <div class="col-12 col-sm-6">
                                             <div class="form-group">
                                                 <label>motif</label>
-                                                <input type="textarea" name="motif" class="form-control">
+                                                <input type="textarea" name="motif" value="<?php echo $rapportActif['motif'] ?>" class="form-control">
                                             </div>
                                         </div>
                                         <div class="col-12 col-sm-6">
