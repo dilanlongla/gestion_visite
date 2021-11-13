@@ -188,6 +188,9 @@ if (isset($_GET['nom'])) {
 
                                                     <td class="text-right">
                                                         <div class="actions">
+                                                            <a href="../rapport/index.php?med_id=<?php echo $medecin['id'] ?>" class="btn btn-sm bg-success mr-2">
+                                                                <i class="fas fa-eye"></i>
+                                                            </a>
                                                             <a href="modifier.php?id=<?php echo $medecin['id'] ?>" class="btn btn-sm bg-success-light mr-2">
                                                                 <i class="fas fa-pen"></i>
                                                             </a>

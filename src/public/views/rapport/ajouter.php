@@ -1,6 +1,8 @@
 <?php
 
 use GestionVisites\Models\Medecin;
+use GestionVisites\Models\Medicament;
+use GestionVisites\Models\Offrir;
 use GestionVisites\Models\Rapport;
 
 session_start();
@@ -12,10 +14,52 @@ if (!isset($_SESSION['user'])) {
     header("Location: ../auth/login.php");
     exit();
 }
+
 $rapportController = new Rapport($dbConnection);
 $medecinController = new Medecin($dbConnection);
+$medicamentController = new Medicament($dbConnection);
 
+$medicaments = $medicamentController->findAll();
 $medecins = $medecinController->findAll();
+
+if (isset($_POST['submit'])) {
+    $data = [];
+
+    $data['idVisiteur'] = $_SESSION['user']['id'];
+
+    if (isset($_POST['date'])) {
+        $data['date'] = $_POST['date'];
+    }
+    if (isset($_POST['motif'])) {
+        $data['motif'] =  $_POST['motif'];
+    }
+    if (isset($_POST['bilan'])) {
+        $data['bilan'] =  $_POST['bilan'];
+    }
+    if (isset($_POST['idMedecin'])) {
+        $data['idMedecin'] = $_POST['idMedecin'];
+    }
+
+    if (isset($_POST['specialiteComplementaire'])) {
+        $data['specialiteComplementaire'] = $_POST['specialiteComplementaire'];
+    }
+    $result = $rapportController->create($data);
+
+    $offrirController = new Offrir($dbConnection);
+    if ($result) {
+        $offrir = [];
+        $last_id = $dbConnection->lastInsertId();
+
+        foreach ($_POST['idMedicament'] as $idMedicament) {
+            $offrir['idMedicament'] = $idMedicament;
+            $offrir['idRapport'] = $last_id;
+        }
+        $offrirController->create($offrir);
+
+        header('Location: index.php');
+        exit();
+    }
+}
 
 ?>
 <!DOCTYPE html>
@@ -137,7 +181,7 @@ $medecins = $medecinController->findAll();
                     <div class="col-sm-12">
                         <div class="card">
                             <div class="card-body">
-                                <form>
+                                <form action="ajouter.php" method="POST">
                                     <div class="row">
                                         <div class="col-12">
                                             <h5 class="form-title"><span>Formulaire</span></h5>
@@ -145,27 +189,12 @@ $medecins = $medecinController->findAll();
                                         <div class="col-12 col-sm-6">
                                             <div class="form-group">
                                                 <label>Medecin</label>
-                                                <select class="form-control">
+                                                <select name="idMedecin" class="form-control">
                                                     <option>Selectionne un Medecin</option>
                                                     <?php
                                                     foreach ($medecins as $medecin) {
                                                     ?>
-                                                        <option value="<?php echo $medecin['id'] ?>" name="idMedecin"><?php echo $medecin['nom'] . ' - ' . $medecin['departement'] ?></option>
-                                                    <?php
-                                                    }
-                                                    ?>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="col-12 col-sm-6">
-                                            <div class="form-group">
-                                                <label>Medicaments</label>
-                                                <select class="form-control">
-                                                    <option>Selectionne un Medecin</option>
-                                                    <?php
-                                                    foreach ($medecins as $medecin) {
-                                                    ?>
-                                                        <option value="<?php echo $medecin['id'] ?>" name="idMedecin"><?php echo $medecin['nom'] . ' - ' . $medecin['departement'] ?></option>
+                                                        <option value="<?php echo $medecin['id'] ?>"><?php echo $medecin['nom'] . ' - ' . $medecin['departement'] ?></option>
                                                     <?php
                                                     }
                                                     ?>
@@ -175,19 +204,34 @@ $medecins = $medecinController->findAll();
                                         <div class="col-12 col-sm-6">
                                             <div class="form-group">
                                                 <label>Date</label>
-                                                <input type="date" class="form-control">
+                                                <input type="date" name="date" class="form-control">
                                             </div>
                                         </div>
                                         <div class="col-12 col-sm-6">
                                             <div class="form-group">
                                                 <label>Bilan</label>
-                                                <input type="text" class="form-control">
+                                                <input type="text" name="bilan" class="form-control">
                                             </div>
                                         </div>
                                         <div class="col-12 col-sm-6">
                                             <div class="form-group">
                                                 <label>motif</label>
-                                                <input type="textarea" class="form-control">
+                                                <input type="textarea" name="motif" class="form-control">
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-sm-6">
+                                            <div class="form-group">
+                                                <label>Medicaments</label>
+                                                <select class="form-control" name="idMedicament[]" multiple>
+                                                    <option>Selectionne les Medicaments</option>
+                                                    <?php
+                                                    foreach ($medicaments as $medicament) {
+                                                    ?>
+                                                        <option value="<?php echo $medicament['id'] ?>"><?php echo $medicament['nomCommercial'] ?></option>
+                                                    <?php
+                                                    }
+                                                    ?>
+                                                </select>
                                             </div>
                                         </div>
                                         <div class="col-12">

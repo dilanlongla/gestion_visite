@@ -25,4 +25,5 @@ class Medecin extends Crud
             exit($e->getMessage());
         }
     }
+    
 }

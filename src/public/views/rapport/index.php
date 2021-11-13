@@ -23,6 +23,9 @@ if (!isset($_SESSION['user'])) {
 
 if (isset($_GET['date'])) {
     $rapports = $rapportController->findByDate($_GET['date']);
+} elseif (isset($_GET['med_id'])) {
+    $rapportController->setPath('idMedecin');
+    $rapports = $rapportController->findByPath($_GET['med_id']);
 } else {
     $rapports = $rapportController->findAll();
 }
@@ -174,7 +177,7 @@ if (isset($_GET['date'])) {
                                         <tbody>
                                             <?php
                                             foreach ($rapports as $rapport) {
-                                                $medecin = $medecinController->findById($rapport['id']);
+                                                $medecin = $medecinController->findById($rapport['idMedecin']);
                                             ?>
                                                 <tr>
                                                     <td><?php echo $rapport['id'] ?></td>
