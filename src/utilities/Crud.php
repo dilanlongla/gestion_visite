@@ -150,7 +150,7 @@ abstract class Crud
 
     public function delete($id)
     {
-        $result = $this->findByPath($id);
+        $result = $this->findById($id);
         if (!$result) {
             return false;
         }

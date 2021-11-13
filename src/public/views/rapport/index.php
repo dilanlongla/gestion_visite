@@ -34,7 +34,7 @@ if (isset($_GET['date'])) {
 <!DOCTYPE html>
 <html lang="en">
 
-<meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<meta http-equiv="content-type" content="text/html;charset=UTF-8" />
 
 <head>
     <meta charset="utf-8">
@@ -187,10 +187,10 @@ if (isset($_GET['date'])) {
                                                     <td><?php echo $rapport['date'] ?></td>
                                                     <td class="text-right">
                                                         <div class="actions">
-                                                            <a href="modifier?id=<?php echo $rapport['id'] ?>" class="btn btn-sm bg-success-light mr-2">
+                                                            <a href="modifier.php?id=<?php echo $rapport['id'] ?>" class="btn btn-sm bg-success-light mr-2">
                                                                 <i class="fas fa-pen"></i>
                                                             </a>
-                                                            <a href="supprimer?id=<?php echo $rapport['id'] ?>" class="btn btn-sm bg-danger-light">
+                                                            <a href="supprimer.php?id=<?php echo $rapport['id'] ?>" class="btn btn-sm bg-danger-light">
                                                                 <i class="fas fa-trash"></i>
                                                             </a>
                                                         </div>
