@@ -7,8 +7,17 @@ session_start();
 require "../../../../vendor/autoload.php";
 require "../../../../start.php";
 
+if (!isset($_SESSION['user'])) {
+    header("Location: ../auth/login.php");
+    exit();
+}
 
 $medecinController = new Medecin($dbConnection);
+
+if (isset($_GET['id'])) {
+    $medecin = $medecinController->findById($_GET['id']);
+}
+
 if (isset($_POST['submit'])) {
     $data = [];
     if (isset($_POST['nom'])) {
@@ -29,19 +38,17 @@ if (isset($_POST['submit'])) {
     if (isset($_POST['specialiteComplementaire'])) {
         $data['specialiteComplementaire'] = $_POST['specialiteComplementaire'];
     }
-    $result = $medecinController->create($data);
+    $id = $_POST['id'];
+    $result = $medecinController->update($id, $data);
 
     if ($result) {
         header('Location: index.php');
         exit();
+    } else {
+        header('Location: index.php');
     }
 }
 
-if (isset($_GET['nom'])) {
-    $medecins = $medecinController->findByNom($_GET['nom']);
-} else {
-    $medecins = $medecinController->findAll();
-}
 ?>
 
 <!DOCTYPE html>
@@ -97,29 +104,29 @@ if (isset($_GET['nom'])) {
                 <i class="fas fa-bars"></i>
             </a>
 
-            <ul class="nav user-menu">
-
-                <li class="nav-item dropdown has-arrow">
-                    <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
-                        <span class="user-img"><img class="rounded-circle" src="../../assets/img/profiles/avatar-01.jpg" width="31" alt="Ryan Taylor"></span>
-                    </a>
-                    <div class="dropdown-menu">
-                        <div class="user-header">
-                            <div class="avatar avatar-sm">
-                                <img src="../../assets/img/profiles/avatar-01.jpg" alt="User Image" class="avatar-img rounded-circle">
-                            </div>
-                            <div class="user-text">
-                                <h6><?php echo $_SESSION['user']['prenom'] ?></h6>
-                                <p class="text-muted mb-0">Visiteur</p>
-                            </div>
-                        </div>
-                        <a class="dropdown-item" href="../../logout.php?page=ajouter.php">Logout</a>
-                    </div>
-                </li>
-
-            </ul>
-
         </div>
+
+        <ul class="nav user-menu">
+
+            <li class="nav-item dropdown has-arrow">
+                <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
+                    <span class="user-img"><img class="rounded-circle" src="../../assets/img/profiles/avatar-01.jpg" width="31" alt="Ryan Taylor"></span>
+                </a>
+                <div class="dropdown-menu">
+                    <div class="user-header">
+                        <div class="avatar avatar-sm">
+                            <img src="../../assets/img/profiles/avatar-01.jpg" alt="User Image" class="avatar-img rounded-circle">
+                        </div>
+                        <div class="user-text">
+                            <h6><?php echo $_SESSION['user']['prenom'] ?></h6>
+                            <p class="text-muted mb-0">Visiteur</p>
+                        </div>
+                    </div>
+                    <a class="dropdown-item" href="../../logout.php?page=modifier.php">Logout</a>
+                </div>
+            </li>
+
+        </ul>
 
         <div class="sidebar" id="sidebar">
             <div class="sidebar-inner slimscroll">
@@ -164,45 +171,47 @@ if (isset($_GET['nom'])) {
                     <div class="col-sm-12">
                         <div class="card">
                             <div class="card-body">
-                                <form action="ajouter.php" method="POST">
+                                <form action="modifier.php" method="POST">
                                     <div class="row">
                                         <div class="col-12">
                                             <h5 class="form-title"><span>Information</span></h5>
                                         </div>
+                                        <input type="text" name="id" hidden value="<?php echo $medecin['id'] ?>" required class="form-control">
+
                                         <div class="col-12 col-sm-6">
                                             <div class="form-group">
                                                 <label>Nom</label>
-                                                <input type="text" name="nom" required class="form-control">
+                                                <input type="text" name="nom" value="<?php echo $medecin['nom'] ?>" required class="form-control">
                                             </div>
                                         </div>
                                         <div class="col-12 col-sm-6">
                                             <div class="form-group">
                                                 <label>Prenom</label>
-                                                <input type="text" name="prenom" required class="form-control">
+                                                <input type="text" name="prenom" value="<?php echo $medecin['prenom'] ?>" required class="form-control">
                                             </div>
                                         </div>
                                         <div class="col-12 col-sm-6">
                                             <div class="form-group">
                                                 <label>Adresse</label>
-                                                <input type="text" name="adresse" required class="form-control">
+                                                <input type="text" name="adresse" value="<?php echo $medecin['adresse'] ?>" required class="form-control">
                                             </div>
                                         </div>
                                         <div class="col-12 col-sm-6">
                                             <div class="form-group">
                                                 <label>tel</label>
-                                                <input type="text" name="tel" required class="form-control">
+                                                <input type="text" name="tel" value="<?php echo $medecin['tel'] ?>" required class="form-control">
                                             </div>
                                         </div>
                                         <div class="col-12 col-sm-6">
                                             <div class="form-group">
                                                 <label>Specialite</label>
-                                                <input type="text" name="specialiteComplementaire" required class="form-control">
+                                                <input type="text" name="specialiteComplementaire" value="<?php echo $medecin['specialiteComplementaire'] ?>" required class="form-control">
                                             </div>
                                         </div>
                                         <div class="col-12 col-sm-6">
                                             <div class="form-group">
                                                 <label>Department</label>
-                                                <input type="text" name="departement" required class="form-control">
+                                                <input type="text" name="departement" value="<?php echo $medecin['departement'] ?>" required class="form-control">
                                             </div>
                                         </div>
                                         <div class="col-12">

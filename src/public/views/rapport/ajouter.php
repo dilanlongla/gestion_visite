@@ -3,10 +3,15 @@
 use GestionVisites\Models\Medecin;
 use GestionVisites\Models\Rapport;
 
+session_start();
+
 require "../../../../vendor/autoload.php";
 require "../../../../start.php";
 
-
+if (!isset($_SESSION['user'])) {
+    header("Location: ../auth/login.php");
+    exit();
+}
 $rapportController = new Rapport($dbConnection);
 $medecinController = new Medecin($dbConnection);
 
@@ -16,8 +21,6 @@ $medecins = $medecinController->findAll();
 <!DOCTYPE html>
 <html lang="en">
 
-<!-- Mirrored from preschool.dreamguystech.com/laravel/public/add-books by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 10 Aug 2021 15:39:17 GMT -->
-<!-- Added by HTTrack -->
 <meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
 
 <head>
@@ -68,6 +71,27 @@ $medecins = $medecinController->findAll();
                 <i class="fas fa-bars"></i>
             </a>
 
+            <ul class="nav user-menu">
+
+                <li class="nav-item dropdown has-arrow">
+                    <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
+                        <span class="user-img"><img class="rounded-circle" src="../../assets/img/profiles/avatar-01.jpg" width="31" alt="Ryan Taylor"></span>
+                    </a>
+                    <div class="dropdown-menu">
+                        <div class="user-header">
+                            <div class="avatar avatar-sm">
+                                <img src="../../assets/img/profiles/avatar-01.jpg" alt="User Image" class="avatar-img rounded-circle">
+                            </div>
+                            <div class="user-text">
+                                <h6><?php echo $_SESSION['user']['prenom'] ?></h6>
+                                <p class="text-muted mb-0">Visiteur</p>
+                            </div>
+                        </div>
+                        <a class="dropdown-item" href="../../logout.php?page=ajouter.php">Logout</a>
+                    </div>
+                </li>
+
+            </ul>
         </div>
 
         <div class="sidebar" id="sidebar">

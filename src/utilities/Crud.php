@@ -37,7 +37,7 @@ abstract class Crud
 
     public function findById($id)
     {
-        $query = " SELECT * FROM " . $this->tableName . " WHERE " . $this->tableId . " = :id; ";
+        $query = " SELECT * FROM " . $this->tableName . " WHERE " . $this->tableId . " =:id; ";
 
         try {
             $statement = $this->dbConnection->prepare($query);
@@ -62,8 +62,6 @@ abstract class Crud
             exit($e->getMessage());
         }
     }
-
-
 
     public function create($input)
     {
@@ -129,7 +127,7 @@ abstract class Crud
             }
         }
 
-        $statement = " UPDATE " . $this->tableName . $set . " WHERE " . $this->params['id'] . " = :id;";
+        $statement = " UPDATE " . $this->tableName . $set . " WHERE " . $this->tableId . " = :id;";
 
         //execute array
         $preparedfields = array();
@@ -157,7 +155,7 @@ abstract class Crud
             return false;
         }
 
-        $query = " DELETE FROM " . $this->tableName . " WHERE " . $this->path . " = :id; ";
+        $query = " DELETE FROM " . $this->tableName . " WHERE " . $this->tableId . " = :id; ";
 
         try {
             $statement = $this->dbConnection->prepare($query);

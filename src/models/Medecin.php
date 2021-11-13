@@ -11,4 +11,18 @@ class Medecin extends Crud
     {
         parent::__construct($dbConnection, $tableName);
     }
+
+    public function findByNom($nom)
+    {
+        $query = " SELECT * FROM " . $this->tableName . " WHERE nom like '%$nom%'; ";
+
+        try {
+            $statement = $this->dbConnection->prepare($query);
+            $statement->execute(array('var' => $nom));
+            $result = $statement->fetchAll(\PDO::FETCH_ASSOC);
+            return $result;
+        } catch (\PDOException $e) {
+            exit($e->getMessage());
+        }
+    }
 }

@@ -3,12 +3,23 @@
 use GestionVisites\Models\Medecin;
 use GestionVisites\Models\Rapport;
 
+session_start();
+
+if (!isset($_SESSION['user'])) {
+    header("Location: ../auth/login.php");
+    exit();
+}
+
 require "../../../../vendor/autoload.php";
 require "../../../../start.php";
 
-
 $rapportController = new Rapport($dbConnection);
 $medecinController = new Medecin($dbConnection);
+
+if (!isset($_SESSION['user'])) {
+    header("Location: ../auth/login.php");
+    exit();
+}
 
 if (isset($_GET['date'])) {
     $rapports = $rapportController->findByDate($_GET['date']);
@@ -90,13 +101,11 @@ if (isset($_GET['date'])) {
                                 <img src="../../assets/img/profiles/avatar-01.jpg" alt="User Image" class="avatar-img rounded-circle">
                             </div>
                             <div class="user-text">
-                                <h6>Ryan Taylor</h6>
-                                <p class="text-muted mb-0">Administrator</p>
+                                <h6><?php echo $_SESSION['user']['prenom'] ?></h6>
+                                <p class="text-muted mb-0">Visiteur</p>
                             </div>
                         </div>
-                        <a class="dropdown-item" href="profile.html">My Profile</a>
-                        <a class="dropdown-item" href="inbox.html">Inbox</a>
-                        <a class="dropdown-item" href="login.html">Logout</a>
+                        <a class="dropdown-item" href="../../logout.php?page=index.php">Logout</a>
                     </div>
                 </li>
 
@@ -175,10 +184,10 @@ if (isset($_GET['date'])) {
                                                     <td><?php echo $rapport['date'] ?></td>
                                                     <td class="text-right">
                                                         <div class="actions">
-                                                            <a href="edit-teacher.html" class="btn btn-sm bg-success-light mr-2">
+                                                            <a href="modifier?id=<?php echo $rapport['id'] ?>" class="btn btn-sm bg-success-light mr-2">
                                                                 <i class="fas fa-pen"></i>
                                                             </a>
-                                                            <a href="#" class="btn btn-sm bg-danger-light">
+                                                            <a href="supprimer?id=<?php echo $rapport['id'] ?>" class="btn btn-sm bg-danger-light">
                                                                 <i class="fas fa-trash"></i>
                                                             </a>
                                                         </div>

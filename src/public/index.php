@@ -3,10 +3,10 @@
 session_start();
 require '../../vendor/autoload.php';
 
-// if (!isset($_SESSION['user_id'])) {
-//     header("Location: views/auth/login.php");
-// exit();
-// }
+if (!isset($_SESSION['user'])) {
+    header("Location: views/auth/login.php");
+    exit();
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -60,7 +60,27 @@ require '../../vendor/autoload.php';
             <a class="mobile_btn" id="mobile_btn">
                 <i class="fas fa-bars"></i>
             </a>
+            <ul class="nav user-menu">
 
+                <li class="nav-item dropdown has-arrow">
+                    <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
+                        <span class="user-img"><img class="rounded-circle" src="assets/img/profiles/avatar-01.jpg" width="31" alt="Ryan Taylor"></span>
+                    </a>
+                    <div class="dropdown-menu">
+                        <div class="user-header">
+                            <div class="avatar avatar-sm">
+                                <img src="assets/img/profiles/avatar-01.jpg" alt="User Image" class="avatar-img rounded-circle">
+                            </div>
+                            <div class="user-text">
+                                <h6><?php echo $_SESSION['user']['prenom'] ?></h6>
+                                <p class="text-muted mb-0">Visiteur</p>
+                            </div>
+                        </div>
+                        <a class="dropdown-item" href="logout.php?page=index.php">Logout</a>
+                    </div>
+                </li>
+
+            </ul>
         </div>
 
         <div class="sidebar" id="sidebar">
@@ -128,7 +148,5 @@ require '../../vendor/autoload.php';
 
 <script src="assets/js/script.js"></script>
 </body>
-
-<!-- Mirrored from preschool.dreamguystech.com/laravel/public/add-books by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 10 Aug 2021 15:39:17 GMT -->
 
 </html>
